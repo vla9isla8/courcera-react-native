@@ -2,7 +2,15 @@ import React, {Component} from "react";
 import {DISHES} from '../shared/dishes';
 import Menu from "./MenuComponent";
 import Dishdetail from "./DishdetailComponent";
-import { View } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
+import Constants from 'expo-constants';
+
+const styles = StyleSheet.create({
+    container: {
+    //   flex: 1,
+      marginTop: Constants.statusBarHeight,
+    }
+});
 
 class Main extends Component {
 
@@ -24,10 +32,10 @@ class Main extends Component {
 
     render() {
         return (
-            <View>
+            <ScrollView style={styles.container}>
                 <Menu dishes={this.state.dishes} onPress={this.onDishSelect} />
                 <Dishdetail dish={this.state.dishes.find(({id}) => id === this.state.selectedDish)} />
-            </View>
+            </ScrollView>
         );
     }
 }

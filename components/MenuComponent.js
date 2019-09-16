@@ -1,10 +1,19 @@
 import React, {Component} from "react";
-import {View, FlatList} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import { ListItem } from 'react-native-elements';
+
+const styles = StyleSheet.create({
+    item: {
+      backgroundColor: '#f9c2ff',
+      marginVertical: 8,
+      marginHorizontal: 16,
+    }
+});
 
 function MenuItem({item,index,onPress}) {
     return (
         <ListItem 
+            style={styles.item}
             key={index}
             title={item.name}
             subtitle={item.description}
