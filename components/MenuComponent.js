@@ -20,7 +20,7 @@ function MenuItem({item,index,onPress}) {
             subtitle={item.description}
             leftAvatar={{source: require("../images/alberto.png")}}
             hideChevron
-            onPress={() => onPress(index)}
+            onPress={onPress}
         />
     );
 }

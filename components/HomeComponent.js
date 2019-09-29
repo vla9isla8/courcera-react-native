@@ -7,7 +7,7 @@ import {LEADERS} from '../shared/leaders';
 import {DISHES} from '../shared/dishes';
 
 
-function RenderItem({item}) {
+function RenderItem({item,onPress}) {
     if (item != null) {
         return (
             <Card 
@@ -15,7 +15,7 @@ function RenderItem({item}) {
                 featuredSubtitle={item.designation}
                 image={require("../images/uthappizza.png")}    
             >
-                <Text style={{margin: 10}}>
+                <Text onPress={onPress ? () => onPress(item.id) : undefined} style={{margin: 10}}>
                     {item.description}
                 </Text>
             </Card>
@@ -49,9 +49,13 @@ class Home extends Component {
         const featuredLeader = this.state.leaders.find(({featured})=> featured);
         const featuredPromo = this.state.promotions.find(({featured})=> featured);
 
+        const {navigate} = this.props.navigation;
+
         return(
             <ScrollView>
-                <RenderItem item={featuredDish} />
+                <RenderItem 
+                    item={featuredDish} 
+                    onPress={(id) => navigate('Dishdetail', {dishId: id})} />
                 <RenderItem item={featuredPromo} />
                 <RenderItem item={featuredLeader} />
             </ScrollView>
