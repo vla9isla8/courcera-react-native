@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {View, FlatList, StyleSheet, Text, ScrollView} from 'react-native';
 import { ListItem, Card } from 'react-native-elements';
-import { LEADERS } from "../shared/leaders";
+import { connect } from "react-redux";
+import { baseUrl } from "../datasource";
 
 const styles = StyleSheet.create({
     item: {
@@ -17,7 +18,7 @@ function RenderItem({item}) {
             style={styles.item}
             title={item.name}
             subtitle={item.description}
-            leftAvatar={{source: require("../images/alberto.png")}}
+            leftAvatar={{source: {uri: baseUrl + item.image}}}
             hideChevron
         />
     );
@@ -34,13 +35,6 @@ function History() {
 
 class AboutUs extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            leders: LEADERS
-        }
-    }
-
     static navigationOptions = {
         title: "About Us"
     }
@@ -52,7 +46,7 @@ class AboutUs extends Component {
                 <History />
                 <Card title="Corporate Leadership">
                     <FlatList
-                        data={this.state.leders}
+                        data={this.props.leaders.data}
                         renderItem={(props) => <RenderItem  
                             {...props}
                         />}
@@ -63,4 +57,9 @@ class AboutUs extends Component {
         );
     }
 }
-export default AboutUs;
+
+const mapStateToProps = ({leaders}) => ({
+    leaders
+});
+
+export default connect(mapStateToProps)(AboutUs);

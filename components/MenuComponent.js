@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import {View, FlatList, StyleSheet} from 'react-native';
+import { FlatList, StyleSheet} from 'react-native';
 import { ListItem } from 'react-native-elements';
-import { DISHES } from "../shared/dishes";
+import { baseUrl } from "../datasource";
+import { connect } from "react-redux";
 
 const styles = StyleSheet.create({
     item: {
@@ -18,21 +19,15 @@ function MenuItem({item,index,onPress}) {
             key={index}
             title={item.name}
             subtitle={item.description}
-            leftAvatar={{source: require("../images/alberto.png")}}
+            leftAvatar={{source: {uri: baseUrl + item.image}}}
             hideChevron
             onPress={onPress}
         />
     );
+
 }
 
 class Menu extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            dishes: DISHES
-        }
-    }
 
     static navigationOptions = {
         title: "Menu"
@@ -44,7 +39,7 @@ class Menu extends Component {
 
         return (
             <FlatList
-                data={this.state.dishes}
+                data={this.props.dishes.data}
                 renderItem={(props) => <MenuItem  
                     {...props} 
                     onPress={() => navigate('Dishdetail', {dishId: props.index})}
@@ -54,4 +49,9 @@ class Menu extends Component {
         );
     }
 }
-export default Menu;
+
+const mapStateToProps = ({dishes}) => ({
+    dishes
+});
+
+export default connect(mapStateToProps)(Menu);

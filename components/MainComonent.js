@@ -12,6 +12,12 @@ import {Icon, Image} from 'react-native-elements';
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
 import AboutUs from "./AboutUsComponent";
+import {loadDishes} from "../redux/actions/dishes";
+import {loadComments} from "../redux/actions/comments";
+import {loadLeaders} from "../redux/actions/leader";
+import {loadPromotions} from "../redux/actions/promotions";
+import {connect} from "react-redux";
+import { baseUrl } from "../datasource";
 
 const MenuNavigator = createStackNavigator({
     Menu: {
@@ -138,7 +144,9 @@ const CustomDrawerContentComponent = (props) => {
                 forceInset={{top: "allways", horizontal: "never"}}>
                 <View style={styles.drawerHeader}>
                     <View style={{flex: 1}}>
-                        <Image style={styles.drawerImage} source={require("../images/logo.png")} />
+                        <Image style={styles.drawerImage} source={{
+                            uri: baseUrl + "images/logo.png"}
+                        } />
                     </View>
                     <View style={{flex: 2}}>
                         <Text style={styles.drawerHeaderText}>
@@ -214,11 +222,26 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
 
 class Main extends Component {
 
+    componentDidMount() {
+        this.props.loadDishes();
+        this.props.loadLeaders();
+        this.props.loadComments();
+        this.props.loadPromotions();
+    }
+
     render() {
         return (
-            <MainNavigator />
+            <MainNavigator/>
         );
     }
 }
 
-export default Main;
+const mapDispatchToProps = {
+    loadDishes,
+    loadComments,
+    loadLeaders,
+    loadPromotions
+}
+
+
+export default connect(null,mapDispatchToProps)(Main);

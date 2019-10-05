@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {View, Text, FlatList} from 'react-native';
-import { Card, Icon, Button } from 'react-native-elements';
-import { DISHES } from "../shared/dishes";
-import { COMMENTS } from "../shared/comments";
+import { Card, Icon} from 'react-native-elements';
 import { ScrollView } from "react-native-gesture-handler";
+import { baseUrl } from "../datasource";
+import {connect} from "react-redux";
 
 function RenderDish({dish, favorite, unmarkFavorite, markFavorite}) {
 
@@ -11,7 +11,9 @@ function RenderDish({dish, favorite, unmarkFavorite, markFavorite}) {
         return (
             <Card 
                 featuredTitle={dish.name}
-                image={require('../images/uthappizza.png')}
+                image={{
+                    uri: baseUrl + dish.image
+                }}
             >
                 <Text style={{margin: 10}}>
                     {dish.description}
@@ -59,8 +61,6 @@ class Dishdetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dishes: DISHES,
-            comments: COMMENTS,
             favorites: []
         }
     }
@@ -87,19 +87,23 @@ class Dishdetail extends Component {
     render() {
         const dishId = this.props.navigation.getParam('dishId');
         const favorite = this.state.favorites.some((el) => el === dishId);
-        console.log(this.state.favorites);
         return (
             <ScrollView>
                 <RenderDish 
-                    dish={this.state.dishes.find(({id})=> id === dishId)} 
+                    dish={this.props.dishes.data.find(({id}) => id === dishId)} 
                     favorite={favorite}
                     unmarkFavorite={this.unmarkFavorite}
                     markFavorite={this.markFavorite}
                 />
-                <RenderComments comments={this.state.comments.filter((item)=> item.dishId === dishId)} />
+                <RenderComments comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} />
             </ScrollView>
         );
     }
 }
 
-export default Dishdetail;
+const mapStateToProps = ({dishes,comments}) => ({
+    dishes,
+    comments
+});
+
+export default connect(mapStateToProps)(Dishdetail);
