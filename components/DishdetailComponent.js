@@ -4,8 +4,17 @@ import { Card, Icon} from 'react-native-elements';
 import { ScrollView } from "react-native-gesture-handler";
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
+import Loading from "./LoadingComponent";
 
-function RenderDish({dish, favorite, unmarkFavorite, markFavorite}) {
+function RenderDish({dish, loading, error, favorite, unmarkFavorite, markFavorite}) {
+    if (loading) {
+        return <Loading />
+    }
+
+    if (error) {
+        return <Text>{error}</Text>
+    }
+
 
     if (dish != null) {
         return (
@@ -34,7 +43,16 @@ function RenderDish({dish, favorite, unmarkFavorite, markFavorite}) {
 }
 
 
-function RenderComments({comments}) {
+function RenderComments({comments,loading,error}) {
+
+    if (loading) {
+        return <Loading />
+    }
+
+    if (error) {
+        return <Text>{error}</Text>
+    }
+
     const renderCommentItem = ({item, index}) => {
         return (
             <View key={index} style={{margin: 10}}>
@@ -91,11 +109,17 @@ class Dishdetail extends Component {
             <ScrollView>
                 <RenderDish 
                     dish={this.props.dishes.data.find(({id}) => id === dishId)} 
+                    loading={this.props.dishes.loading}
+                    error={this.props.dishes.error}
                     favorite={favorite}
                     unmarkFavorite={this.unmarkFavorite}
                     markFavorite={this.markFavorite}
                 />
-                <RenderComments comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} />
+                <RenderComments 
+                    comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} 
+                    loading={this.props.comments.loading}
+                    error={this.props.comments.error}
+                />
             </ScrollView>
         );
     }

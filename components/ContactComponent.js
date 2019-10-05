@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {ScrollView, View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Card } from "react-native-elements";
 
 const styles = StyleSheet.create({

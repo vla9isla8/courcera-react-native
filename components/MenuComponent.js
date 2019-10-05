@@ -1,8 +1,9 @@
 import React, {Component} from "react";
-import { FlatList, StyleSheet} from 'react-native';
+import { FlatList, StyleSheet, View} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import { connect } from "react-redux";
+import Loading from "./LoadingComponent";
 
 const styles = StyleSheet.create({
     item: {
@@ -34,6 +35,14 @@ class Menu extends Component {
     }
 
     render() {
+
+        if (this.props.dishes.loading) {
+            return <Loading />
+        }
+    
+        if (this.props.dishes.error) {
+            return <View><Text>{error}</Text></View>
+        }
 
         const {navigate} = this.props.navigation;
 

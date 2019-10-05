@@ -1,8 +1,9 @@
 import React, {Component} from "react";
-import {View, FlatList, StyleSheet, Text, ScrollView} from 'react-native';
+import { FlatList, StyleSheet, Text, ScrollView, View} from 'react-native';
 import { ListItem, Card } from 'react-native-elements';
 import { connect } from "react-redux";
 import { baseUrl } from "../datasource";
+import Loading from "./LoadingComponent";
 
 const styles = StyleSheet.create({
     item: {
@@ -33,6 +34,27 @@ function History() {
     );
 }
 
+function Leaders(props) {
+    if (props.loading) {
+        return <Loading />
+    }
+
+    if (props.error) {
+        return <View><Text>{error}</Text></View>
+    }
+    return (
+        <Card title="Corporate Leadership">
+            <FlatList
+                data={props.data}
+                renderItem={(props) => <RenderItem  
+                    {...props}
+                />}
+                keyExtractor={({id}) => id.toString()}
+            />
+        </Card>
+    )
+}
+
 class AboutUs extends Component {
 
     static navigationOptions = {
@@ -40,19 +62,12 @@ class AboutUs extends Component {
     }
 
     render() {
-
         return (
             <ScrollView>
                 <History />
-                <Card title="Corporate Leadership">
-                    <FlatList
-                        data={this.props.leaders.data}
-                        renderItem={(props) => <RenderItem  
-                            {...props}
-                        />}
-                        keyExtractor={({id}) => id.toString()}
-                    />
-                </Card>
+                <Leaders
+                    {...this.props.leaders}
+                />
             </ScrollView>
         );
     }

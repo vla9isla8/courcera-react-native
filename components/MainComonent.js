@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {DISHES} from '../shared/dishes';
 import Menu from "./MenuComponent";
 import Dishdetail from "./DishdetailComponent";
 import { StyleSheet, ScrollView, Platform, SafeAreaView, View, Text } from "react-native";

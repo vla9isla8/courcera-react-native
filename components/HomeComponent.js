@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import {ScrollView, View, Text } from "react-native";
 import { Card } from "react-native-elements";
-import {PROMOTIONS} from '../shared/promotions';
-import {COMMENTS} from '../shared/comments';
-import {LEADERS} from '../shared/leaders';
-import {DISHES} from '../shared/dishes';
 import {connect} from "react-redux";
 import { baseUrl } from "../datasource";
+import Loading from "./LoadingComponent";
 
 function RenderItem({item,onPress,loading,error}) {
+
+    if (loading) {
+        return <Loading/>;
+    }
+
+    if (error) {
+        return <Text>{error}</Text>
+    }
+
     if (item != null) {
         return (
             <Card 
