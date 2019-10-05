@@ -17,6 +17,7 @@ import {loadLeaders} from "../redux/actions/leader";
 import {loadPromotions} from "../redux/actions/promotions";
 import {connect} from "react-redux";
 import { baseUrl } from "../datasource";
+import Reservation from "./ReservationComponent";
 
 const MenuNavigator = createStackNavigator({
     Menu: {
@@ -91,6 +92,28 @@ const ContactNavigator = createStackNavigator({
 const AboutUsNavigator = createStackNavigator({
     AboutUs: {
         screen: AboutUs
+    }
+}, {
+    defaultNavigationOptions: ({navigation}) => ({
+        headerLeft: <Icon 
+            name="menu" 
+            size={24}
+            color='white'
+            onPress={() => navigation.toggleDrawer()}
+        />,
+        headerStyle: {
+            backgroundColor: "#512DA8"
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+            color: "#fff"
+        }
+    })
+});
+
+const ReservationNavigator = createStackNavigator({
+    AboutUs: {
+        screen: Reservation
     }
 }, {
     defaultNavigationOptions: ({navigation}) => ({
@@ -211,7 +234,20 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
                 color={tintColor}
             />
         }
-    }
+    },
+    Reservation: {
+        screen: ReservationNavigator,
+        navigationOptions: {
+            title: "Reserve Table",
+            drawerLabel: "Reserve Table",
+            drawerIcon: ({tintColor}) => <Icon 
+                name="cutlery"
+                type="font-awesome"
+                size={24}
+                color={tintColor}
+            />
+        }
+    },
 },{
     defaultNavigationOptions: {
         backgroundColor: "#000"
