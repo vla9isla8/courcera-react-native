@@ -5,8 +5,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
 import Loading from "./LoadingComponent";
+import {postFavorite} from "../redux/actions/favorites";
 
-function RenderDish({dish, loading, error, favorite, unmarkFavorite, markFavorite}) {
+function RenderDish({dish, loading, error, favorite, markFavorite}) {
     if (loading) {
         return <Loading />
     }
@@ -33,7 +34,7 @@ function RenderDish({dish, loading, error, favorite, unmarkFavorite, markFavorit
                     name={ favorite ? "heart" : "heart-o"}
                     type='font-awesome'
                     color="#f50"
-                    onPress={() => favorite ? unmarkFavorite(dish.id) : markFavorite(dish.id)}
+                    onPress={() => markFavorite(dish.id)}
                 />
             </Card>
         );
@@ -88,23 +89,13 @@ class Dishdetail extends Component {
     }
 
     markFavorite = (dishId) => {
-        this.setState({
-            favorites: [
-                ...this.state.favorites,
-                dishId
-            ]
-        });
-    }
-
-    unmarkFavorite = (dishId) => {
-        this.setState({
-            favorites: this.state.favorites.filter((id) => id !== dishId)
-        });
+        this.props.postFavorite(dishId);
     }
 
     render() {
         const dishId = this.props.navigation.getParam('dishId');
-        const favorite = this.state.favorites.some((el) => el === dishId);
+        const favorite = this.props.favorites.some((el) => el === dishId);
+    
         return (
             <ScrollView>
                 <RenderDish 
@@ -112,9 +103,9 @@ class Dishdetail extends Component {
                     loading={this.props.dishes.loading}
                     error={this.props.dishes.error}
                     favorite={favorite}
-                    unmarkFavorite={this.unmarkFavorite}
                     markFavorite={this.markFavorite}
                 />
+            
                 <RenderComments 
                     comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} 
                     loading={this.props.comments.loading}
@@ -125,9 +116,14 @@ class Dishdetail extends Component {
     }
 }
 
-const mapStateToProps = ({dishes,comments}) => ({
+const mapStateToProps = ({dishes,comments,favorites}) => ({
     dishes,
-    comments
+    comments,
+    favorites
 });
 
-export default connect(mapStateToProps)(Dishdetail);
+const mapDispatchToProps = {
+    postFavorite
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Dishdetail);
