@@ -5,32 +5,32 @@ import {connect} from "react-redux";
 import { baseUrl } from "../datasource";
 import Loading from "./LoadingComponent";
 
-function RenderItem({item,onPress,loading,error}) {
+function RenderItem({item,onPress,loading,error,style}) {
 
     if (loading) {
-        return <Loading/>;
+        return <Loading style={style}/>;
     }
 
     if (error) {
-        return <Text>{error}</Text>
+        return <View style={style}><Text>{error}</Text></View>
     }
 
     if (item != null) {
         return (
             <Card 
+                style={style}
                 featuredTitle={item.name}
                 featuredSubtitle={item.designation}
                 image={{
                     uri: baseUrl + item.image
-                }}
-            >
+                }} >
                 <Text onPress={onPress ? () => onPress(item.id) : undefined} style={{margin: 10}}>
                     {item.description}
                 </Text>
             </Card>
         );
     } else {
-        return (<View/>);
+        return (<View style={style}/>);
     }
 }
 
@@ -52,18 +52,21 @@ class Home extends Component {
         const {navigate} = this.props.navigation;
 
         return(
-            <ScrollView>
+            <ScrollView style={{flex: 1}}>
                 <RenderItem 
+                    style={{flex: 1}}
                     item={featuredDish} 
                     loading={this.props.dishes.loading}
                     error={this.props.dishes.error}
                     onPress={(id) => navigate('Dishdetail', {dishId: id})} />
                 <RenderItem 
+                    style={{flex: 1}}
                     item={featuredPromo} 
                     loading={this.props.promotions.loading}
                     error={this.props.promotions.error}
                 />
                 <RenderItem 
+                    style={{flex: 1}}
                     item={featuredLeader} 
                     loading={this.props.leaders.loading}
                     error={this.props.leaders.error}

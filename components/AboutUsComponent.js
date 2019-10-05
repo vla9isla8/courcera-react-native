@@ -40,7 +40,7 @@ function Leaders(props) {
     }
 
     if (props.error) {
-        return <View><Text>{error}</Text></View>
+        return <View style={{flex: 1}}><Text>{props.error}</Text></View>
     }
     return (
         <Card title="Corporate Leadership">
@@ -63,7 +63,7 @@ class AboutUs extends Component {
 
     render() {
         return (
-            <ScrollView>
+            <ScrollView style={{flexGrow: 1}}>
                 <History />
                 <Leaders
                     {...this.props.leaders}

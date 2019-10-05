@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { FlatList, StyleSheet, View} from 'react-native';
+import { FlatList, StyleSheet, View, Text} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import { connect } from "react-redux";
@@ -41,7 +41,7 @@ class Menu extends Component {
         }
     
         if (this.props.dishes.error) {
-            return <View><Text>{error}</Text></View>
+            return <View><Text>{this.props.dishes.error}</Text></View>
         }
 
         const {navigate} = this.props.navigation;

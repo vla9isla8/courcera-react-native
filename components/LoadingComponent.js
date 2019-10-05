@@ -19,9 +19,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const Loading = () => {
+const Loading = ({style}) => {
     return(
-        <View style={styles.loadingView} >
+        <View style={{
+            ...style,
+            ...styles.loadingView}} >
             <ActivityIndicator size="large" color="#512DA8" />
             <Text style={styles.loadingText} >Loading . . .</Text>
         </View>
