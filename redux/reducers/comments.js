@@ -1,4 +1,4 @@
-import { LOADING_COMMENTS_COMPLETE, LOADING_COMMENTS_ERROR, LOADING_COMMENTS_START } from "../events/comments";
+import { LOADING_COMMENTS_COMPLETE, LOADING_COMMENTS_ERROR, LOADING_COMMENTS_START, ADD_COMMENT } from "../events/comments";
 
 function dishesReducer(state,action) {
     if (!state) {
@@ -9,7 +9,21 @@ function dishesReducer(state,action) {
         }
     }
 
-    switch(action.type){
+    switch(action.type) {
+        case ADD_COMMENT: {
+            const comment = {
+                ...action.payload,
+                id: state.data.length,
+                date: new Date().toISOString()
+            };
+            return {
+                ...state,
+                data: [
+                    ...state.data,
+                    comment
+                ]
+            };
+        }
         case LOADING_COMMENTS_COMPLETE: {
             return {
                 ...state,

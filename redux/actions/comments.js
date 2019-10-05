@@ -1,4 +1,5 @@
-import { LOADING_COMMENTS_COMPLETE, LOADING_COMMENTS_ERROR, LOADING_COMMENTS_START } from "../events/comments";
+import { LOADING_COMMENTS_COMPLETE, LOADING_COMMENTS_ERROR, 
+    LOADING_COMMENTS_START, ADD_COMMENT } from "../events/comments";
 import { get } from "../../datasource";
 
 const loadStart = () => ({
@@ -15,6 +16,11 @@ const loadError = (error) => ({
     payload: error
 });
 
+const addComment = (comment) => ({
+    type: ADD_COMMENT,
+    payload: comment
+});
+
 
 export const loadComments = () => {
     return (dispatch) => {
@@ -24,5 +30,17 @@ export const loadComments = () => {
         }).catch(reason => {
             dispatch(loadError(reason.message));
         })
+    }
+}
+
+export const postComment = (data, dishId) => {
+    return (dispatch) => {
+        setTimeout(
+            () => dispatch(addComment({
+                ...data,
+                dishId
+            })),
+            2000
+        );
     }
 }

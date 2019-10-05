@@ -21,19 +21,19 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         margin: 20
-     },
-     modalTitle: {
+    },
+    modalTitle: {
          fontSize: 24,
          fontWeight: 'bold',
          backgroundColor: '#512DA8',
          textAlign: 'center',
          color: 'white',
          marginBottom: 20
-     },
-     modalText: {
+    },
+    modalText: {
          fontSize: 18,
          margin: 10
-     }
+    }
 });
 
 
