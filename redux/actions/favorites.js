@@ -1,7 +1,12 @@
-import { ADD_FAVORITE } from "../events/favorites";
+import { ADD_FAVORITE, DELETE_FAVORITE } from "../events/favorites";
 
 const addFavorite = (id) => ({
     type: ADD_FAVORITE,
+    payload: id
+});
+
+export const deleteFavorite = (id) => ({
+    type: DELETE_FAVORITE,
     payload: id
 });
 

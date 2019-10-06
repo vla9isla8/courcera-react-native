@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import {View, Text, FlatList, Modal,
     StyleSheet, Button} from 'react-native';
-import { Card, Icon, Input, Rating, ListItem} from 'react-native-elements';
-import { ScrollView } from "react-native-gesture-handler";
+import { ListItem } from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
 import Loading from "./LoadingComponent";
-import {postFavorite} from "../redux/actions/favorites";
-import {postComment} from "../redux/actions/comments";
-
+import {deleteFavorite} from "../redux/actions/favorites";
+import SwipeOut from "react-native-swipeout";
 
 class Favorites extends Component {
 
@@ -22,18 +20,29 @@ class Favorites extends Component {
         const {dishes,favorites} = this.props;
 
         const renderMenuItem = ({ item, index }) => {
+            
+            const rightButton = [
+                {
+                    text: "Delete",
+                    type: "delete",
+                    onPress: () => this.props.deleteFavorite(item.id)
+                }
+            ];
+            
             return (
-                <ListItem 
-                    key={index}
-                    title={item.name}
-                    subtitle={item.description}
-                    leftAvatar={{
-                        source: {
-                            uri: baseUrl + item.image
-                        }
-                    }}
-                    onPress={()=> navigate('Dishdetail', {dishId: item.id})}
-                />
+                <SwipeOut right={rightButton} autoClose >
+                    <ListItem
+                        key={index}
+                        title={item.name}
+                        subtitle={item.description}
+                        leftAvatar={{
+                            source: {
+                                uri: baseUrl + item.image
+                            }
+                        }}
+                        onPress={()=> navigate('Dishdetail', {dishId: item.id})}
+                    />
+                </SwipeOut>
             );
         }
 
@@ -70,4 +79,8 @@ const mapStateToProps = ({dishes,favorites}) => ({
     favorites
 });
 
-export default connect(mapStateToProps)(Favorites);
+const mapDispatchToProps = {
+    deleteFavorite
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Favorites);

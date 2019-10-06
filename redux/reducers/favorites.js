@@ -1,4 +1,4 @@
-import { ADD_FAVORITE } from "../events/favorites";
+import { ADD_FAVORITE, DELETE_FAVORITE } from "../events/favorites";
 
 export default function(state,action) {
     if (!state) {
@@ -15,6 +15,9 @@ export default function(state,action) {
                 ...state,
                 action.payload
             ];
+        }
+        case DELETE_FAVORITE: {
+            return state.filter((el) => el !== action.payload);
         }
 
         default: {
