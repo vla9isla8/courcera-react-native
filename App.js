@@ -1,17 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Main from './components/MainComonent';
-import { createStore, applyMiddleware } from 'redux';
-import reducers from './redux/reducers';
 import {Provider} from "react-redux";
-import thunk from 'redux-thunk';
-import logger from "redux-logger";
-const store = createStore(reducers,applyMiddleware(thunk,logger));
+import configureStore from './redux/configureStore';
+import {PersistGate} from 'redux-persist/es/integration/react';
+import Loading from './components/LoadingComponent';
+const {persistor, store} = configureStore();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <Main/>
+      <PersistGate 
+        loading={<Loading/>} 
+        persistor={persistor} >
+        <Main/>
+      </PersistGate> 
     </Provider> 
   );
 }
