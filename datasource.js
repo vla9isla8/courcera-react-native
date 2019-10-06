@@ -1,4 +1,4 @@
-export const baseUrl = "http://192.168.0.77:3001/"
+export const baseUrl = "http://192.168.1.2:3001/"
 
 export const get = (path) => {
     return fetch(baseUrl + path).then(response => {

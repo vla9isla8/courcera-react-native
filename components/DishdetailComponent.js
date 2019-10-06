@@ -106,8 +106,15 @@ class CommentModalForm extends Component {
 
 function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorite, panResponderGrant, submitComment}) {
     
-    const recognizeDrag = ({moveX, moveY, dx, dy}) => {
+    const recognizeDragRight = ({moveX, moveY, dx, dy}) => {
         if (dx < -200) {
+            return true;
+        }
+        return false;
+    };
+
+    const recognizeDragLeft = ({moveX, moveY, dx, dy}) => {
+        if (dx > 200) {
             return true;
         }
         return false;
@@ -121,7 +128,7 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
             panResponderGrant();
         },
         onPanResponderEnd: (e, gestureState) => {
-            if (recognizeDrag(gestureState)) {
+            if (recognizeDragRight(gestureState)) {
                 Alert.alert(
                     "Add to favorites?",
                     "Are you shure you wish to add " + dish.name + " to your favorites?",
@@ -137,6 +144,8 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
                     ],
                     { cancelable: false }
                 );
+            } else if (recognizeDragLeft(gestureState)) {
+                submitComment();
             }
             return true;
         }
