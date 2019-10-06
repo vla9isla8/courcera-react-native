@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {View, Text, FlatList, Modal,
-     StyleSheet, Button, Alert, ScrollView} from 'react-native';
+     StyleSheet, Button, Alert, ScrollView, PanResponder} from 'react-native';
 import { Card, Icon, Input, Rating} from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
@@ -105,6 +105,40 @@ class CommentModalForm extends Component {
 
 
 function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorite, submitComment}) {
+    
+    const recognizeDrag = ({moveX, moveY, dx, dy}) => {
+        if (dx < -200) {
+            return true;
+        }
+        return false;
+    };
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => {
+            return true;
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            if (recognizeDrag(gestureState)) {
+                Alert.alert(
+                    "Add to favorites?",
+                    "Are you shure you wish to add " + dish.name + " to your favorites?",
+                    [
+                        {
+                            text: "Cancel",
+                            style: "cancel"
+                        }, {
+                            text: "Ok",
+                            style: "default",
+                            onPress: () => markFavorite(dish.id)
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            }
+            return true;
+        }
+    });
+    
     if (loading) {
         return <Loading />
     }
@@ -121,6 +155,7 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
                 image={{
                     uri: baseUrl + dish.image
                 }}
+                {...panResponder.panHandlers}
             >
                 <View>
                     <Text style={{margin: 10}}>

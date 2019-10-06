@@ -21,12 +21,17 @@ function MenuItem({item,index,onPress}) {
                 duration={2000} 
                 delay={1000} >
             <Tile 
-                style={styles.item}
                 key={index}
+                containerStyle={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 1
+                }}
+                imageContainerStyle={{
+                    width: "100%"
+                }}
                 title={item.name}
-                subtitle={item.description}
                 imageSrc={{uri: baseUrl + item.image}}
-                hideChevron
                 onPress={onPress}
             />                                       
         </Animatable.View> 
