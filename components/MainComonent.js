@@ -18,6 +18,7 @@ import {loadPromotions} from "../redux/actions/promotions";
 import {connect} from "react-redux";
 import { baseUrl } from "../datasource";
 import Reservation from "./ReservationComponent";
+import FavoritesComponent from "./FavoritesComponent";
 
 const MenuNavigator = createStackNavigator({
     Menu: {
@@ -114,6 +115,28 @@ const AboutUsNavigator = createStackNavigator({
 const ReservationNavigator = createStackNavigator({
     AboutUs: {
         screen: Reservation
+    }
+}, {
+    defaultNavigationOptions: ({navigation}) => ({
+        headerLeft: <Icon 
+            name="menu" 
+            size={24}
+            color='white'
+            onPress={() => navigation.toggleDrawer()}
+        />,
+        headerStyle: {
+            backgroundColor: "#512DA8"
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+            color: "#fff"
+        }
+    })
+});
+
+const FavoritesNavigator = createStackNavigator({
+    Favorites: {
+        screen: FavoritesComponent
     }
 }, {
     defaultNavigationOptions: ({navigation}) => ({
@@ -231,6 +254,19 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
                 name="address-card"
                 type="font-awesome"
                 size={22}
+                color={tintColor}
+            />
+        }
+    },
+    Favorites: {
+        screen: FavoritesNavigator,
+        navigationOptions: {
+            title: "My Favorites",
+            drawerLabel: "My Favorites",
+            drawerIcon: ({tintColor}) => <Icon 
+                name="heart"
+                type="font-awesome"
+                size={24}
                 color={tintColor}
             />
         }
