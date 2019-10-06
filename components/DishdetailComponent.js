@@ -1,12 +1,11 @@
 import React, {Component} from "react";
 import {View, Text, FlatList, Modal,
-     StyleSheet, Button} from 'react-native';
+     StyleSheet, Button, Alert, ScrollView} from 'react-native';
 import { Card, Icon, Input, Rating} from 'react-native-elements';
-import { ScrollView } from "react-native-gesture-handler";
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
 import Loading from "./LoadingComponent";
-import {postFavorite} from "../redux/actions/favorites";
+import {postFavorite, deleteFavorite} from "../redux/actions/favorites";
 import {postComment} from "../redux/actions/comments";
 
 
@@ -104,7 +103,7 @@ class CommentModalForm extends Component {
 }
 
 
-function RenderDish({dish, loading, error, favorite, markFavorite, submitComment}) {
+function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorite, submitComment}) {
     if (loading) {
         return <Loading />
     }
@@ -133,7 +132,7 @@ function RenderDish({dish, loading, error, favorite, markFavorite, submitComment
                             name={ favorite ? "heart" : "heart-o"}
                             type='font-awesome'
                             color="#f50"
-                            onPress={() => markFavorite(dish.id)}
+                            onPress={() => favorite ? unmarkFavorite(dish.id) : markFavorite(dish.id)}
                         />
                         <Icon
                             raised
@@ -206,6 +205,22 @@ class Dishdetail extends Component {
         this.props.postFavorite(dishId);
     }
 
+    unmarkFavorite = (dishId) => {
+        Alert.alert(
+            "Delete Favorite?",
+            "Are you sure you wish to delete the favorite dish?",
+            [
+                {
+                    text: "Cansel",
+                    style: 'cancel'
+                },{
+                    text: "Ok",
+                    style: "default",
+                    onPress: () => this.props.deleteFavorite(dishId)
+                }
+            ] )
+    }
+
     openCommentForm() {
         this.setState({
             commentFormOpen: true
@@ -237,6 +252,7 @@ class Dishdetail extends Component {
                     error={this.props.dishes.error}
                     favorite={favorite}
                     markFavorite={this.markFavorite}
+                    unmarkFavorite={this.unmarkFavorite}
                     submitComment={()=> this.openCommentForm()}
                 />
             
@@ -263,7 +279,8 @@ const mapStateToProps = ({dishes,comments,favorites}) => ({
 
 const mapDispatchToProps = {
     postFavorite,
-    postComment
+    postComment,
+    deleteFavorite
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(Dishdetail);
