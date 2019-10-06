@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import { FlatList, StyleSheet, View, Text} from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Tile } from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import { connect } from "react-redux";
 import Loading from "./LoadingComponent";
+import * as Animatable from "react-native-animatable";
 
 const styles = StyleSheet.create({
     item: {
@@ -15,15 +16,20 @@ const styles = StyleSheet.create({
 
 function MenuItem({item,index,onPress}) {
     return (
-        <ListItem 
-            style={styles.item}
-            key={index}
-            title={item.name}
-            subtitle={item.description}
-            leftAvatar={{source: {uri: baseUrl + item.image}}}
-            hideChevron
-            onPress={onPress}
-        />
+        <Animatable.View 
+                animation="fadeInRightBig" 
+                duration={2000} 
+                delay={1000} >
+            <Tile 
+                style={styles.item}
+                key={index}
+                title={item.name}
+                subtitle={item.description}
+                imageSrc={{uri: baseUrl + item.image}}
+                hideChevron
+                onPress={onPress}
+            />                                       
+        </Animatable.View> 
     );
 
 }

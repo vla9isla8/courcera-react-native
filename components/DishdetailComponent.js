@@ -8,6 +8,7 @@ import Loading from "./LoadingComponent";
 import {postFavorite, deleteFavorite} from "../redux/actions/favorites";
 import {postComment} from "../redux/actions/comments";
 
+import * as Animatable from "react-native-animatable";
 
 
 const commentFormStyles = StyleSheet.create({
@@ -246,21 +247,30 @@ class Dishdetail extends Component {
     
         return (
             <ScrollView>
-                <RenderDish 
-                    dish={this.props.dishes.data.find(({id}) => id === dishId)} 
-                    loading={this.props.dishes.loading}
-                    error={this.props.dishes.error}
-                    favorite={favorite}
-                    markFavorite={this.markFavorite}
-                    unmarkFavorite={this.unmarkFavorite}
-                    submitComment={()=> this.openCommentForm()}
-                />
-            
-                <RenderComments 
-                    comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} 
-                    loading={this.props.comments.loading}
-                    error={this.props.comments.error}
-                />
+                <Animatable.View 
+                    animation="fadeInDown" 
+                    duration={2000} 
+                    delay={1000} >
+                    <RenderDish 
+                        dish={this.props.dishes.data.find(({id}) => id === dishId)} 
+                        loading={this.props.dishes.loading}
+                        error={this.props.dishes.error}
+                        favorite={favorite}
+                        markFavorite={this.markFavorite}
+                        unmarkFavorite={this.unmarkFavorite}
+                        submitComment={()=> this.openCommentForm()}
+                    />
+                </Animatable.View>
+                <Animatable.View 
+                    animation="fadeInUp" 
+                    duration={2000} 
+                    delay={1000} >
+                    <RenderComments 
+                        comments={this.props.comments.data.filter((item)=> item.dishId === dishId)} 
+                        loading={this.props.comments.loading}
+                        error={this.props.comments.error}
+                    />
+                </Animatable.View>
                 <CommentModalForm 
                     open={this.state.commentFormOpen}
                     onClose={() => this.closeCommentForm()}

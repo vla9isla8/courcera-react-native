@@ -4,6 +4,7 @@ import { ListItem, Card } from 'react-native-elements';
 import { connect } from "react-redux";
 import { baseUrl } from "../datasource";
 import Loading from "./LoadingComponent";
+import * as Animatable from "react-native-animatable";
 
 const styles = StyleSheet.create({
     item: {
@@ -64,10 +65,20 @@ class AboutUs extends Component {
     render() {
         return (
             <ScrollView style={{flexGrow: 1}}>
-                <History />
-                <Leaders
-                    {...this.props.leaders}
-                />
+                <Animatable.View 
+                    animation="fadeInDown" 
+                    duration={2000} 
+                    delay={1000} >
+                    <History />
+                </Animatable.View>
+                <Animatable.View 
+                    animation="fadeInDown" 
+                    duration={2000} 
+                    delay={1000} >
+                    <Leaders
+                        {...this.props.leaders}
+                    />
+                </Animatable.View>
             </ScrollView>
         );
     }
