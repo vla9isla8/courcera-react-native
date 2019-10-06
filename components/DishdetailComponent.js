@@ -104,7 +104,7 @@ class CommentModalForm extends Component {
 }
 
 
-function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorite, submitComment}) {
+function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorite, panResponderGrant, submitComment}) {
     
     const recognizeDrag = ({moveX, moveY, dx, dy}) => {
         if (dx < -200) {
@@ -116,6 +116,9 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: (e, gestureState) => {
             return true;
+        },
+        onPanResponderGrant: () => {
+            panResponderGrant();
         },
         onPanResponderEnd: (e, gestureState) => {
             if (recognizeDrag(gestureState)) {
@@ -237,6 +240,16 @@ class Dishdetail extends Component {
         title: "Dish Detail"
     }
 
+    handleViewRef = (ref) => {
+        this.view = ref;
+    }
+
+    panResponderGrant = () => {
+        this.view.rubberBand(1000).then((endState) => {
+            console.log(endState.finished ? "Finished" : "Canceled");
+        });
+    }
+
     markFavorite = (dishId) => {
         this.props.postFavorite(dishId);
     }
@@ -285,6 +298,7 @@ class Dishdetail extends Component {
                 <Animatable.View 
                     animation="fadeInDown" 
                     duration={2000} 
+                    ref={this.handleViewRef}
                     delay={1000} >
                     <RenderDish 
                         dish={this.props.dishes.data.find(({id}) => id === dishId)} 
@@ -293,6 +307,7 @@ class Dishdetail extends Component {
                         favorite={favorite}
                         markFavorite={this.markFavorite}
                         unmarkFavorite={this.unmarkFavorite}
+                        panResponderGrant={this.panResponderGrant}
                         submitComment={()=> this.openCommentForm()}
                     />
                 </Animatable.View>
