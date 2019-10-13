@@ -3,6 +3,8 @@ import {Text,View,ScrollView,StyleSheet, Picker, Switch, Button, Modal, Alert} f
 import {Card} from "react-native-elements";
 import DatePicker from "react-native-datepicker";
 import {View as AnimatedView} from "react-native-animatable";
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 const styles = StyleSheet.create({
     formRow: {
@@ -74,7 +76,10 @@ Date and Time: ${this.state.date}`;
                 {
                     text: "Ok",
                     style: "default",
-                    onPress: () => this.resetForm()
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date)
+                        this.resetForm()
+                    }
                 }
             ]
         );
@@ -86,6 +91,36 @@ Date and Time: ${this.state.date}`;
             smoking: false,
             date: '',
         });
+    }
+
+    async obtainNotificationPerrmision() {
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        if ( permission.status !== 'granted' ) {
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notification');
+            }
+        }
+        return permission;
+    }
+
+    async presentLocalNotification(date) {
+        let permission = await this.obtainNotificationPerrmision();
+        if (permission) {
+            Notifications.presentLocalNotificationAsync({
+                title: "Your Reservation",
+                body: "Reservation for " + date + ' requested',
+                ios: {
+                    sound: true
+                },
+                android: {
+                    sound: true,
+                    vibrate: true,
+                    color: "#512DA8"
+                }
+            
+            });
+        }
     }
 
     render() {
