@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {View, Text, FlatList, Modal,
-     StyleSheet, Button, Alert, ScrollView, PanResponder} from 'react-native';
+     StyleSheet, Button, Alert, ScrollView, PanResponder, Share} from 'react-native';
 import { Card, Icon, Input, Rating} from 'react-native-elements';
 import { baseUrl } from "../datasource";
 import {connect} from "react-redux";
@@ -151,6 +151,16 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
         }
     });
     
+    const shareDish = (title, description, url) => {
+        Share.share({
+            message: description,
+            title,
+            url
+        }, {
+            dialogTitle: title
+        });
+    }
+
     if (loading) {
         return <Loading />
     }
@@ -189,6 +199,14 @@ function RenderDish({dish, loading, error, favorite, markFavorite, unmarkFavorit
                             type='font-awesome'
                             color="#512DA8"
                             onPress={submitComment}
+                        />
+                        <Icon
+                            raised
+                            reverse
+                            name={"share"}
+                            color="#512DA8"
+                            type='font-awesome'
+                            onPress={() => shareDish(dish.title, dish.description, baseUrl + dish.image)}
                         />
                     </View>
                 </View>

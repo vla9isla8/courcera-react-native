@@ -48,6 +48,7 @@ class Contact extends Component {
                         }}
                         icon={<Icon 
                             name="envelope-o"
+                            color="white"
                             type="font-awesome"
                         />}
                         onPress={this.sendMail}
