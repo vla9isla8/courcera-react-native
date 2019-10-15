@@ -3,6 +3,7 @@ import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Button, CheckBox, Icon, Input } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import * as Permissions from "expo-permissions";
 import { baseUrl } from "../datasource";
@@ -193,9 +194,7 @@ class RegisterTab extends Component {
                 aspect: [4, 3],
             });
             if (!captureImage.cancelled) {
-                this.setState({
-                    imageUrl: captureImage.uri,
-                });
+                this.processImage(captureImage.uri);
             }
         } else {
             // console.error("Somethink bad");
@@ -203,6 +202,26 @@ class RegisterTab extends Component {
             console.log(cameraRollPermission.status);
 
         }
+    };
+
+    processImage = async (imageUrl) => {
+        const precessedImage = await ImageManipulator.manipulateAsync(
+            imageUrl,
+            [
+                {
+                    resize: {
+                        width: 400,
+                        height: 300,
+                    },
+                },
+            ],
+            {
+                format: "png",
+            },
+        );
+        this.setState({
+            imageUrl: precessedImage.uri,
+        });
     };
 
     render() {
