@@ -1,21 +1,21 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Menu from "./MenuComponent";
 import Dishdetail from "./DishdetailComponent";
-import { StyleSheet, ScrollView, Platform, SafeAreaView, View, Text } from "react-native";
-import Constants from 'expo-constants';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator, DrawerNavigatorItems } from 'react-navigation-drawer';
-import { createAppContainer } from 'react-navigation';
-import {Icon, Image} from 'react-native-elements';
-
+import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import Constants from "expo-constants";
+import { createStackNavigator } from "react-navigation-stack";
+import { createDrawerNavigator, DrawerNavigatorItems } from "react-navigation-drawer";
+import { createAppContainer } from "react-navigation";
+import { Icon, Image } from "react-native-elements";
+import NetInfo from "@react-native-community/netinfo";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
 import AboutUs from "./AboutUsComponent";
-import {loadDishes} from "../redux/actions/dishes";
-import {loadComments} from "../redux/actions/comments";
-import {loadLeaders} from "../redux/actions/leader";
-import {loadPromotions} from "../redux/actions/promotions";
-import {connect} from "react-redux";
+import { loadDishes } from "../redux/actions/dishes";
+import { loadComments } from "../redux/actions/comments";
+import { loadLeaders } from "../redux/actions/leader";
+import { loadPromotions } from "../redux/actions/promotions";
+import { connect } from "react-redux";
 import { baseUrl } from "../datasource";
 import Reservation from "./ReservationComponent";
 import FavoritesComponent from "./FavoritesComponent";
@@ -328,11 +328,37 @@ const MainNavigator = createAppContainer(createDrawerNavigator({
 
 class Main extends Component {
 
-    componentDidMount() {
+    netInfoSubscription;
+
+    async componentDidMount() {
+        this.netInfoSubscription = NetInfo.addEventListener(this.handleConnectivityChange);
         this.props.loadDishes();
         this.props.loadLeaders();
         this.props.loadComments();
         this.props.loadPromotions();
+        const netInfoData = await NetInfo.fetch();
+        ToastAndroid.show("Network Connectivity Type:" + netInfoData.type, ToastAndroid.LONG);
+    }
+
+    componentWillUnmount() {
+        this.netInfoSubscription();
+    }
+
+    handleConnectivityChange(netInfoData) {
+        switch (netInfoData.type) {
+            case "none":
+                ToastAndroid.show("You are offline", ToastAndroid.LONG);
+                break;
+            case "wifi":
+                ToastAndroid.show("You are now connected to WiFi!", ToastAndroid.LONG);
+                break;
+            case "cellular":
+                ToastAndroid.show("You are connected to Cellular!", ToastAndroid.LONG);
+                break;
+            case "unknown":
+                ToastAndroid.show("You are have a unknown connection!", ToastAndroid.LONG);
+                break;
+        }
     }
 
     render() {
